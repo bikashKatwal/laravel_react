@@ -3,7 +3,7 @@ import axios from 'axios';
 import SuccessAlert from "./SuccessAlert";
 import ErrorAlert from "./ErrorAlert";
 
-class Add extends Component {
+class Edit extends Component {
 
     constructor(props) {
         super(props);
@@ -13,6 +13,14 @@ class Add extends Component {
             category_name: '',
             alert_message: ''
         };
+    }
+
+    async componentDidMount() {
+        const response = await axios.get('http://127.0.0.1:8000/api/category/edit/' + this.props.match.params.id);
+        console.log("Edit", response);
+        this.setState({
+            category_name: response.data.name
+        });
     }
 
     onChangeCategoryName(e) {
@@ -26,10 +34,10 @@ class Add extends Component {
         const category = {
             categoryName: this.state.category_name
         };
-        try{
-            const response = await axios.post('http://127.0.0.1:8000/api/category/store', category);
+        try {
+            const response = await axios.patch('http://127.0.0.1:8000/api/category/update/' + this.props.match.params.id, category);
             this.setState({alert_message: "success"})
-        }catch (e) {
+        } catch (error) {
             this.setState({alert_message: "error"})
         }
     };
@@ -40,14 +48,15 @@ class Add extends Component {
             <div>
                 {this.state.alert_message == "success" ? <SuccessAlert message="Updated Successfully"/> : null}
                 {this.state.alert_message == "error" ? <ErrorAlert message="Oops!! Something happened"/> : null}
-                <form onSubmit={(e)=>this.handleSubmit(e)}>
+
+                <form onSubmit={(e) => this.handleSubmit(e)}>
                     <div className="form-group">
                         <label htmlFor="category_name">Category Name</label>
                         <input type="text" className="form-control" id="category_name"
                                placeholder="Enter category"
                                value={this.state.category_name}
                                onChange={(e) => this.onChangeCategoryName(e)}
-                               // onChange={this.onChangeCategoryName}
+                            // onChange={this.onChangeCategoryName}
                         />
                     </div>
 
@@ -58,4 +67,4 @@ class Add extends Component {
     }
 }
 
-export default Add;
+export default Edit;

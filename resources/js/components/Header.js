@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Link} from "react-router-dom"
+import {Route, Link} from "react-router-dom"
 import Home from "./Home";
 import About from "./About";
 import Category from "./category";
+import Add from "./category/Add";
+import Edit from "./category/Edit";
 
 class Header extends Component {
     render() {
         return (
-            <Router>
+
                 <div>
                     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
 
@@ -41,8 +43,11 @@ class Header extends Component {
                     <Route path="/" exact component={Home}/>
                     <Route path="/about" exact component={About}/>
                     <Route path="/category" exact component={Category}/>
+
+                    <Route path="/category/add" exact component={Category} />
+                    <Route path="/category/edit/:id" exact component={Category} />
                 </div>
-            </Router>
+
 
         );
     }
