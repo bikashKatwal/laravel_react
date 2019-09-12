@@ -46,6 +46,7 @@ class Edit extends Component {
     render() {
         return (
             <div>
+                <hr/>
                 {this.state.alert_message == "success" ? <SuccessAlert message="Updated Successfully"/> : null}
                 {this.state.alert_message == "error" ? <ErrorAlert message="Oops!! Something happened"/> : null}
 

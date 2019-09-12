@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import Pagination from "react-js-pagination";
+import SuccessAlert from "./SuccessAlert";
+import ErrorAlert from "./ErrorAlert";
 
 import {Link} from 'react-router-dom';
 
@@ -13,8 +15,8 @@ class Listing extends Component {
             activePage: 1,
             itemsCountPerPage: 1,
             totalItemsCount: 1,
-            pageRangeDisplayed: 5
-
+            pageRangeDisplayed: 5,
+            alert_message: ''
         };
     }
 
@@ -42,11 +44,16 @@ class Listing extends Component {
     }
 
     async onHandleDelete(id) {
-        const response = await axios.delete("http://127.0.0.1:8000/api/category/delete/" + id);
-        const category = this.state.categories.filter((cat) => cat.id !== id);
-        this.setState({
-            categories: category
-        });
+        try {
+            const response = await axios.delete("http://127.0.0.1:8000/api/category/delete/" + id);
+            const category = this.state.categories.filter((cat) => cat.id !== id);
+            this.setState({
+                categories: category,
+                alert_message: "success"
+            });
+        } catch (e) {
+            this.setState({alert_message: "error"});
+        }
     }
 
     renderCategoryList() {
@@ -71,6 +78,9 @@ class Listing extends Component {
     render() {
         return (
             <div>
+                <hr/>
+                {this.state.alert_message == "success" ? <SuccessAlert message="Deleted Successfully"/> : null}
+                {this.state.alert_message == "error" ? <ErrorAlert message="Oops!! Something happened"/> : null}
                 <table className="table">
                     <thead>
                     <tr>
